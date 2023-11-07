@@ -7,22 +7,17 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    private float spawnRate = 1.0f;
     public List<GameObject> targets;
     private int score;
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI gameOverText;
     public bool isGameActive;
     public Button restartButton;
+    public GameObject titleScreen;
+    private float spawnRate = 1.0f;
 
     // Start is called before the first frame update
-    void Start() {
-        score = 0;
-        scoreText.text = "Score: " + score;
-        UpdateScore(0);
-        isGameActive = true;
-        StartCoroutine(SpawnTarget());
-    }
+    void Start() {}
 
     IEnumerator SpawnTarget() {
         while(isGameActive) {
@@ -30,6 +25,15 @@ public class GameManager : MonoBehaviour
             int index = Random.Range(0, targets.Count);
             Instantiate(targets[index]);
         }
+    }
+
+    public void StartGame(int difficulty) {
+        isGameActive = true;
+        score = 0;
+        spawnRate /= difficulty;
+        StartCoroutine(SpawnTarget());
+        UpdateScore(0);
+        titleScreen.gameObject.SetActive(false);
     }
 
     public void UpdateScore(int scoreToAdd) {
