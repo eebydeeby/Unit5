@@ -1,20 +1,27 @@
+// Spawns targets and handles input and collision
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class Target : MonoBehaviour
 {   
     private Rigidbody targetRb;
+
+    // Parameters for targets' movement
     private float minSpeed = 12;
     private float maxSpeed = 16;
     private float maxTorque = 10;
     private float xRange = 4;
     private float ySpawnPos = -6;
-    private GameManager gameManager;
-    public int pointValue;
-    public ParticleSystem explosionParticle;
 
+    private GameManager gameManager; // Refers to GameManager object in scene
+
+    public int pointValue; // Variable for receiving target scores
+
+    public ParticleSystem explosionParticle; // Variable for particle effect animation
+
+    // Sets up target to be spawned with random physics forces
     void Start() {
         targetRb = GetComponent<Rigidbody>();
         targetRb.AddForce(RandomForce(), ForceMode.Impulse);
@@ -31,9 +38,10 @@ public class Target : MonoBehaviour
         return Random.Range(-maxTorque, maxTorque);
     }
     Vector3 RandomSpawnPos() {
-        return new Vector3(Random.Range(-xRange, xRange), ySpawnPos);
+        return new Vector3(Random.Range(-xRange, xRange), ySpawnPos); // Assigns random spawn point along bottom of screen
     }
 
+    // Destroys target when clicked on
     private void OnMouseDown() { 
         if (gameManager.isGameActive) {
             Destroy(gameObject);
@@ -42,15 +50,12 @@ public class Target : MonoBehaviour
         }
     }
 
+    // Begins game over sequence if "good" targets reach sensor at bottom of scene
     private void OnTriggerEnter(Collider other) {
         Destroy(gameObject);
         if (!gameObject.CompareTag("Bad"))
         {
             gameManager.GameOver();
         }
-    }
-
-    public void RestartGame() {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

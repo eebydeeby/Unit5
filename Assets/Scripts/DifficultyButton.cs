@@ -1,3 +1,5 @@
+// Sets difficulty of game according to which choice is clicked at the start of the scene
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,22 +11,16 @@ public class DifficultyButton : MonoBehaviour
     private GameManager gameManager;
     public int difficulty;
 
-    // Start is called before the first frame update
+    // Waits for choice from player and gets game manager object
     void Start()
     {
         button = GetComponent<Button>();
-        button.onClick.AddListener(SetDifficulty);
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        button.onClick.AddListener(SetDifficulty);
     }
 
+    // Passes difficulty selected from button onto game manager
     void SetDifficulty() {
-        Debug.Log(gameObject.name + "was clicked");
         gameManager.StartGame(difficulty);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
